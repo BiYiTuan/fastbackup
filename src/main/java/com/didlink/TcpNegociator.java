@@ -70,6 +70,8 @@ public class TcpNegociator {
                 System.out.println(String.format("TcpEstablishedListener public address %s %d, local port %d", publicAddress, publicPort, localPort));
 
                 try {
+                    String localIP = InetAddress.getLocalHost().getHostAddress();
+                    System.out.println(String.format("Local IP address: %s",localIP));
 
                     BufferedReader stdin;
                     stdin = new BufferedReader(new InputStreamReader(System.in));

@@ -65,6 +65,9 @@ public class UdpNegociator {
                 System.out.println(String.format("UdpEstablishedListener public address %s %d, local port %d", publicAddress, publicPort, localPort));
 
                 try {
+                    String localIP = InetAddress.getLocalHost().getHostAddress();
+                    System.out.println(String.format("Local IP address: %s",localIP));
+
                     startListen(dgramSocket, publicAddress, publicPort, localPort);
 
                     BufferedReader stdin;

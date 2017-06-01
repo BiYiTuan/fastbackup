@@ -79,7 +79,7 @@ public class Peer {
     }
 
     public boolean isSucceed() {
-        return this.requestReceived && this.responseReceived;
+        return this.requestReceived || this.responseReceived;
     }
 
     public boolean isTimeout() {

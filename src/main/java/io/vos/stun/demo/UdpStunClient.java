@@ -104,9 +104,6 @@ public class UdpStunClient {
 //        dgramSocket.connect(InetAddress.getByName(stunServer), serverPort);
         dgramSocket.setSoTimeout(timeout);
 
-        String localIP = InetAddress.getLocalHost().getHostAddress();
-        System.out.println(localIP);
-
         System.out.println(String.format("Started datagram client on %s %d ", dgramSocket.getLocalAddress(), dgramSocket.getLocalPort()));
 
         Message request = Message.builder()

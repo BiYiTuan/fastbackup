@@ -29,6 +29,10 @@ public final class Attributes {
   public static final int ATTRIBUTE_NONCE = 0x0015;
   public static final int ATTRIBUTE_XOR_MAPPED_ADDRESS = 0x0020;
 
+  public static final int ATTRIBUTE_SIMPLE = 0x1001;
+  public static final int ATTRIBUTE_DATA = 0x1002;
+  public static final int ATTRIBUTE_FILEINFO = 0x1002;
+
   /** RFC 5389 Comprehension-optional range (0x8000-0xFFFF) */
   public static final int ATTRIBUTE_SOFTWARE = 0x8022;
   public static final int ATTRIBUTE_ALTERNATE_SERVER = 0x8023;

@@ -65,9 +65,6 @@ public class UdpNegociator {
                 System.out.println(String.format("UdpEstablishedListener public address %s %d, local port %d", publicAddress, publicPort, localPort));
 
                 try {
-                    String localIP = InetAddress.getLocalHost().getHostAddress();
-                    System.out.println(String.format("Local IP address: %s",localIP));
-
                     startListen(dgramSocket, publicAddress, publicPort, localPort);
 
                     BufferedReader stdin;
@@ -100,6 +97,9 @@ public class UdpNegociator {
             }
 
         };
+
+        String localIP = InetAddress.getLocalHost().getHostAddress();
+        System.out.println(String.format("Local IP address: %s",localIP));
 
         UdpStunClient udpStunClient = new UdpStunClient();
         udpStunClient.tryTest(AppSingleton.stunServer, AppSingleton.stunPort, udpEstablishedListener);
@@ -244,43 +244,56 @@ public class UdpNegociator {
             while (true) {
                 try {
 
-                    byte[] buffer = new byte[512];
+                    byte[] buffer = new byte[1024];
                     DatagramPacket packet =  new DatagramPacket(buffer, buffer.length);
                     dgramSocket.receive(packet);
-
-                    String recStr = new String(packet.getData(), 0, packet.getLength());
-
-                    Message message = new Message(Preconditions.checkNotNull(buffer));
                     int packetLen = packet.getLength();
 //                    System.out.println(String.format("Received packet of size %d bytes", packetLen));
                     byte[] msgBuffer = new byte[packetLen];
                     System.arraycopy(buffer, 0, msgBuffer, 0, packetLen);
 
+                    int packageType = msgBuffer[0] >>> 6;
+
+                    Message message = new Message(Preconditions.checkNotNull(msgBuffer));
+
                     final InetSocketAddress remoteAddress =
                             new InetSocketAddress(packet.getAddress(), packet.getPort());
+                    ResponseHandler rh =
+                            createMessageHandler(dgramSocket, publicAddress, publicPort);
                     switch (message.getMessageMethod()) {
                         case MESSAGE_METHOD_NEGOCIATE:
                             switch (message.getMessageClass()) {
                                 case MESSAGE_CLASS_INDICATION:
-                                    ResponseHandler rh =
-                                            createMessageHandler(dgramSocket, publicAddress, publicPort);
                                     agent.onMessage(msgBuffer, remoteAddress, rh);
                                     break;
                                 case MESSAGE_CLASS_REQUEST:
-                                    ResponseHandler rh1 =
-                                            createMessageHandler(dgramSocket, publicAddress, publicPort);
-                                    agent.onMessage(msgBuffer, remoteAddress, rh1);
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
                                     break;
                                 case MESSAGE_CLASS_RESPONSE:
-                                    ResponseHandler rh2 =
-                                            createMessageHandler(dgramSocket, publicAddress, publicPort);
-                                    agent.onMessage(msgBuffer, remoteAddress, rh2);
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    break;
+                                default:
+                                    throw new AssertionError("Handling invalid message class, this should have been validated");
+                            }
+                            break;
+                        case MESSAGE_METHOD_TRANSFER_FILE:
+                            switch (message.getMessageClass()) {
+                                case MESSAGE_CLASS_GET:
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    break;
+                                case MESSAGE_CLASS_PUT:
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    break;
+                                case MESSAGE_CLASS_RESPONSE:
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
                                     break;
                                 default:
                                     throw new AssertionError("Handling invalid message class, this should have been validated");
                             }
                             break;
                         default:
+                            String recStr = new String(packet.getData(), 0, packet.getLength());
+
                             System.out.println(String.format("%s %d: %s",packet.getAddress(), packet.getPort(), recStr));
                             if (!repeat && recStr.equals("repeat") && this.sendService != null) {
                                 this.sendService.sendMessage(recStr, packet.getAddress().getHostAddress(), packet.getPort());
@@ -288,7 +301,6 @@ public class UdpNegociator {
                             }
 //                            throw new AssertionError("Handling invalid message class, this should have been validated");
                     }
-
 
                 } catch (SocketException e) {
                     e.printStackTrace();

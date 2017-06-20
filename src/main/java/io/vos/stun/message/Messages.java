@@ -27,6 +27,9 @@ public class Messages {
   public static final int MESSAGE_CLASS_INDICATION = 1;
   public static final int MESSAGE_CLASS_RESPONSE = 2;
   public static final int MESSAGE_CLASS_ERROR_RESPONSE = 3;
+  public static final int MESSAGE_CLASS_GET = 4;
+  public static final int MESSAGE_CLASS_PUT = 5;
+  public static final int MESSAGE_CLASS_DATA = 6;
 
   /** RFC 5389 methods */
   public static final int MESSAGE_METHOD_RESERVED = 0x000;
@@ -35,16 +38,17 @@ public class Messages {
 
   /** new **/
   public static final int MESSAGE_METHOD_NEGOCIATE = 0x003;
+  public static final int MESSAGE_METHOD_TRANSFER_FILE = 0x004;
 
   /** RFC 5766 methods */
-  public static final int MESSAGE_METHOD_ALLOCATE = 0x003;
-  public static final int MESSAGE_METHOD_REFRESH = 0x004;
-  public static final int MESSAGE_METHOD_UNASSIGNED_1 = 0x005;
-  public static final int MESSAGE_METHOD_SEND = 0x006;
-  public static final int MESSAGE_METHOD_DATA = 0x007;
-  public static final int MESSAGE_METHOD_CREATE_PERMISSION = 0x008;
-  public static final int MESSAGE_METHOD_CHANNEL_BIND = 0x009;
-  public static final int MESSAGE_METHOD_CONNECT = 0x00A;
-  public static final int MESSAGE_METHOD_CONNECTION_BIND = 0x00B;
-  public static final int MESSAGE_METHOD_CONNECTION_ATTEMPT = 0x00C;
+  //public static final int MESSAGE_METHOD_ALLOCATE = 0x003;
+  //public static final int MESSAGE_METHOD_REFRESH = 0x004;
+  //public static final int MESSAGE_METHOD_UNASSIGNED_1 = 0x005;
+  //public static final int MESSAGE_METHOD_SEND = 0x006;
+  //public static final int MESSAGE_METHOD_DATA = 0x007;
+  //public static final int MESSAGE_METHOD_CREATE_PERMISSION = 0x008;
+  //public static final int MESSAGE_METHOD_CHANNEL_BIND = 0x009;
+  //public static final int MESSAGE_METHOD_CONNECT = 0x00A;
+  //public static final int MESSAGE_METHOD_CONNECTION_BIND = 0x00B;
+  //public static final int MESSAGE_METHOD_CONNECTION_ATTEMPT = 0x00C;
 }

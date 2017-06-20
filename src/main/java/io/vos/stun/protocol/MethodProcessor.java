@@ -38,6 +38,12 @@ public interface MethodProcessor {
    */
   byte[] processIndication(RequestContext requestContext) throws ProtocolException;
 
+  byte[] processGet(RequestContext requestContext) throws ProtocolException;
+
+  byte[] processPut(RequestContext requestContext) throws ProtocolException;
+
+  byte[] processData(RequestContext requestContext) throws ProtocolException;
+
   /**
    * Processes the given message. Throws a runtime exception for any message
    * with a method other than that returned by {@code #getMethod}, or if a

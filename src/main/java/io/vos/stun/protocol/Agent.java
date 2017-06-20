@@ -86,6 +86,21 @@ public class Agent implements MessageHandler {
                   proc.processResponse(new RequestContext(message, attributes, remoteAddress));
           responseHandler.onResponse(responseMapAddrBytes, remoteAddress.getAddress(), remoteAddress.getPort());
           break;
+        case MESSAGE_CLASS_GET:
+//          byte[] responseMapAddrBytes =
+//                  proc.processResponse(new RequestContext(message, attributes, remoteAddress));
+//          responseHandler.onResponse(responseMapAddrBytes, remoteAddress.getAddress(), remoteAddress.getPort());
+          break;
+        case MESSAGE_CLASS_PUT:
+          byte[] putResponseBytes =
+                  proc.processPut(new RequestContext(message, attributes, remoteAddress));
+          responseHandler.onPut(putResponseBytes, remoteAddress.getAddress(), remoteAddress.getPort());
+          break;
+        case MESSAGE_CLASS_DATA:
+//          byte[] responseMapAddrBytes =
+//                  proc.processResponse(new RequestContext(message, attributes, remoteAddress));
+//          responseHandler.onResponse(responseMapAddrBytes, remoteAddress.getAddress(), remoteAddress.getPort());
+          break;
         case MESSAGE_CLASS_ERROR_RESPONSE:
           proc.processError(message, attributes);
           break;

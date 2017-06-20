@@ -376,7 +376,24 @@ public class UdpNegociator {
                     {
                         break;
                     }
-                    AppSingleton.getInstance().getSendService().sendMessage(line, remoteAddress, remotePort);
+                    //AppSingleton.getInstance().getSendService().sendMessage(line, remoteAddress, remotePort);
+
+                    Attribute attribute = FileInfoAttribute
+                            .createAttribute(66666, line.getBytes());
+                    AttributesCollection attributes = AttributesCollection.EMPTY_COLLECTION;
+                    byte[] attributeBytes = attributes.replyBuilder()
+                            .addAttribute(attribute)
+                            .build()
+                            .toByteArray();
+
+                    Message request = Message.builder()
+                            .setMessageClass(MESSAGE_CLASS_PUT)
+                            .setMessageMethod(MESSAGE_METHOD_TRANSFER_FILE)
+                            .setAttributeBytes(attributeBytes)
+                            .build();
+                    byte[] requestBytes = request.getBytes();
+
+                    AppSingleton.getInstance().getSendService().sendMessage(requestBytes, remoteAddress, remotePort);
                 }
             }
             catch (Exception e)
@@ -439,6 +456,21 @@ public class UdpNegociator {
                 if (!AppSingleton.getInstance().getNodeCollection().hasPeer(destAddress, destPort)) {
                     AppSingleton.getInstance().getNodeCollection().addPeer(destAddress.getHostAddress(), destPort);
                 }
+            }
+
+            @Override
+            public void onGet(byte[] messageData, InetAddress destAddress, int destPort) {
+
+            }
+
+            @Override
+            public void onPut(byte[] messageData, InetAddress destAddress, int destPort) {
+
+            }
+
+            @Override
+            public void onData(byte[] messageData, InetAddress destAddress, int destPort) {
+
             }
         };
     }

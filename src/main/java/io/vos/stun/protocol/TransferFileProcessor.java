@@ -1,5 +1,7 @@
 package io.vos.stun.protocol;
 
+import io.vos.stun.attribute.AttributesCollection;
+import io.vos.stun.attribute.FileInfoAttribute;
 import io.vos.stun.message.Message;
 
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.vos.stun.attribute.Attributes.ATTRIBUTE_FILEINFO;
 import static io.vos.stun.message.Messages.*;
 
 final class TransferFileProcessor extends BaseMethodProcessor {
@@ -43,6 +46,11 @@ final class TransferFileProcessor extends BaseMethodProcessor {
 
   @Override
   protected byte[] processPutInternal(RequestContext requestContext) {
+    AttributesCollection attributes = requestContext.getAttributesCollection();
+    FileInfoAttribute fileInfoAttri =
+            (FileInfoAttribute)attributes.getFirstAttributeOfType(ATTRIBUTE_FILEINFO);
+
+    System.out.println(fileInfoAttri.getPath() + fileInfoAttri.getSize());
     return null;
   }
 

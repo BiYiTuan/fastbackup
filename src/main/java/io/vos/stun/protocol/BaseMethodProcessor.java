@@ -134,54 +134,6 @@ public class BaseMethodProcessor implements MethodProcessor {
   }
 
   @Override
-  public byte[] processGet(RequestContext requestContext) throws ProtocolException{
-    if (!isClassSupported(MESSAGE_CLASS_GET)) {
-      throw new UnsupportedOperationException();
-    }
-
-    List<Integer> unknownAttributeTypes = findUnknownAttributeTypes(requestContext.getAttributes());
-    if (unknownAttributeTypes.size() > 0) {
-      String errorMsg = String.format(
-              "Unknown required attribute types %s", Joiner.on(",").join(unknownAttributeTypes));
-      throw new ProtocolException(ProtocolException.ReasonCode.UNKNOWN_ATTRIBUTE, errorMsg);
-    }
-
-    return processGetInternal(requestContext);
-  }
-
-  @Override
-  public byte[] processPut(RequestContext requestContext) throws ProtocolException{
-    if (!isClassSupported(MESSAGE_CLASS_PUT)) {
-      throw new UnsupportedOperationException();
-    }
-
-    List<Integer> unknownAttributeTypes = findUnknownAttributeTypes(requestContext.getAttributes());
-    if (unknownAttributeTypes.size() > 0) {
-      String errorMsg = String.format(
-              "Unknown required attribute types %s", Joiner.on(",").join(unknownAttributeTypes));
-      throw new ProtocolException(ProtocolException.ReasonCode.UNKNOWN_ATTRIBUTE, errorMsg);
-    }
-
-    return processPutInternal(requestContext);
-  }
-
-  @Override
-  public byte[] processData(RequestContext requestContext) throws ProtocolException{
-    if (!isClassSupported(MESSAGE_CLASS_DATA)) {
-      throw new UnsupportedOperationException();
-    }
-
-    List<Integer> unknownAttributeTypes = findUnknownAttributeTypes(requestContext.getAttributes());
-    if (unknownAttributeTypes.size() > 0) {
-      String errorMsg = String.format(
-              "Unknown required attribute types %s", Joiner.on(",").join(unknownAttributeTypes));
-      throw new ProtocolException(ProtocolException.ReasonCode.UNKNOWN_ATTRIBUTE, errorMsg);
-    }
-
-    return processDataInternal(requestContext);
-  }
-
-  @Override
   public byte[] processResponse(RequestContext requestContext) throws ProtocolException {
     if (!isClassSupported(MESSAGE_CLASS_RESPONSE)) {
       throw new UnsupportedOperationException();

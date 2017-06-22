@@ -261,21 +261,6 @@ public class TcpStunClient {
         public void onIndication(byte[] messageData, InetAddress destAddress, int destPort) {
 
         }
-
-        @Override
-        public void onGet(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
-
-        @Override
-        public void onPut(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
-
-        @Override
-        public void onData(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
       };
     }
   }

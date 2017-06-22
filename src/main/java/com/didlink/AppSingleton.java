@@ -19,7 +19,7 @@ public class AppSingleton {
 
 //    public static String stunServer = "www.disneyfans.cn";
 //    public static String stunServer = "localhost";
-    public static String stunServer = "10.86.150.37";
+    public static String stunServer = "10.86.130.136";
 
     public static int stunPort = 3479;
 

@@ -21,7 +21,7 @@ final class TransferFileProcessor extends BaseMethodProcessor {
   private final String PATH = "files/";
 
   TransferFileProcessor() {
-    super(MESSAGE_METHOD_TRANSFER_FILE, MESSAGE_CLASS_PUT, MESSAGE_CLASS_GET, MESSAGE_CLASS_RESPONSE, MESSAGE_CLASS_DATA);
+    super(MESSAGE_METHOD_TRANSFER_FILE, MESSAGE_CLASS_REQUEST, MESSAGE_CLASS_RESPONSE, MESSAGE_CLASS_INDICATION);
   }
 
   @Override
@@ -56,6 +56,7 @@ final class TransferFileProcessor extends BaseMethodProcessor {
 
   @Override
   protected byte[] processDataInternal(RequestContext requestContext) {
+
     return null;
   }
 

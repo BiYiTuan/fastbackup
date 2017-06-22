@@ -278,13 +278,13 @@ public class UdpNegociator {
                             break;
                         case MESSAGE_METHOD_TRANSFER_FILE:
                             switch (message.getMessageClass()) {
-                                case MESSAGE_CLASS_GET:
-                                    agent.onMessage(msgBuffer, remoteAddress, rh);
-                                    break;
-                                case MESSAGE_CLASS_PUT:
+                                case MESSAGE_CLASS_REQUEST:
                                     agent.onMessage(msgBuffer, remoteAddress, rh);
                                     break;
                                 case MESSAGE_CLASS_RESPONSE:
+                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    break;
+                                case MESSAGE_CLASS_INDICATION:
                                     agent.onMessage(msgBuffer, remoteAddress, rh);
                                     break;
                                 default:
@@ -387,7 +387,7 @@ public class UdpNegociator {
                             .toByteArray();
 
                     Message request = Message.builder()
-                            .setMessageClass(MESSAGE_CLASS_PUT)
+                            .setMessageClass(MESSAGE_CLASS_REQUEST)
                             .setMessageMethod(MESSAGE_METHOD_TRANSFER_FILE)
                             .setAttributeBytes(attributeBytes)
                             .build();
@@ -458,20 +458,6 @@ public class UdpNegociator {
                 }
             }
 
-            @Override
-            public void onGet(byte[] messageData, InetAddress destAddress, int destPort) {
-
-            }
-
-            @Override
-            public void onPut(byte[] messageData, InetAddress destAddress, int destPort) {
-
-            }
-
-            @Override
-            public void onData(byte[] messageData, InetAddress destAddress, int destPort) {
-
-            }
         };
     }
 

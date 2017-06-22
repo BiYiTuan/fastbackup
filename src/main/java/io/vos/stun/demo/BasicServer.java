@@ -122,21 +122,6 @@ public class BasicServer {
         public void onIndication(byte[] messageData, InetAddress destAddress, int destPort) {
           onResponse(messageData, destAddress, destPort);
         }
-
-        @Override
-        public void onGet(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
-
-        @Override
-        public void onPut(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
-
-        @Override
-        public void onData(byte[] messageData, InetAddress destAddress, int destPort) {
-
-        }
       };
     }
   }
@@ -269,20 +254,6 @@ public class BasicServer {
             onResponse(messageData, destAddress, destPort);
           }
 
-          @Override
-          public void onGet(byte[] messageData, InetAddress destAddress, int destPort) {
-
-          }
-
-          @Override
-          public void onPut(byte[] messageData, InetAddress destAddress, int destPort) {
-
-          }
-
-          @Override
-          public void onData(byte[] messageData, InetAddress destAddress, int destPort) {
-
-          }
         };
         InetSocketAddress responseAddress =
             new InetSocketAddress(clientSocket.getInetAddress(), clientSocket.getPort());

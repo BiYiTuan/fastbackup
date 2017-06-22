@@ -65,18 +65,6 @@ public class BaseMethodProcessor implements MethodProcessor {
     throw new UnsupportedOperationException();
   }
 
-  protected byte[] processGetInternal(RequestContext requestContext) {
-    throw new UnsupportedOperationException();
-  }
-
-  protected byte[] processPutInternal(RequestContext requestContext) {
-    throw new UnsupportedOperationException();
-  }
-
-  protected byte[] processDataInternal(RequestContext requestContext) {
-    throw new UnsupportedOperationException();
-  }
-
   /**
    * Called after attributes are validated in {@code #processResponse}. Override
    * in a subclass.

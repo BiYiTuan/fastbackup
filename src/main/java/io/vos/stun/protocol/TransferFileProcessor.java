@@ -26,6 +26,11 @@ final class TransferFileProcessor extends BaseMethodProcessor {
 
   @Override
   protected byte[] processRequestInternal(RequestContext requestContext) {
+    AttributesCollection attributes = requestContext.getAttributesCollection();
+    FileInfoAttribute fileInfoAttri =
+            (FileInfoAttribute)attributes.getFirstAttributeOfType(ATTRIBUTE_FILEINFO);
+
+    System.out.println(fileInfoAttri.getPath() + fileInfoAttri.getSize());
     return null;
   }
 
@@ -36,27 +41,6 @@ final class TransferFileProcessor extends BaseMethodProcessor {
 
   @Override
   protected byte[] processResponseInternal(RequestContext requestContext) {
-    return null;
-  }
-
-  @Override
-  protected byte[] processGetInternal(RequestContext requestContext) {
-    return null;
-  }
-
-  @Override
-  protected byte[] processPutInternal(RequestContext requestContext) {
-    AttributesCollection attributes = requestContext.getAttributesCollection();
-    FileInfoAttribute fileInfoAttri =
-            (FileInfoAttribute)attributes.getFirstAttributeOfType(ATTRIBUTE_FILEINFO);
-
-    System.out.println(fileInfoAttri.getPath() + fileInfoAttri.getSize());
-    return null;
-  }
-
-  @Override
-  protected byte[] processDataInternal(RequestContext requestContext) {
-
     return null;
   }
 

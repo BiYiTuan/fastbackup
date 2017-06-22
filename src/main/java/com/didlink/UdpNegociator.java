@@ -258,10 +258,10 @@ public class UdpNegociator {
 
                     final InetSocketAddress remoteAddress =
                             new InetSocketAddress(packet.getAddress(), packet.getPort());
-                    ResponseHandler rh =
-                            createMessageHandler(dgramSocket, publicAddress, publicPort);
                     switch (message.getMessageMethod()) {
                         case MESSAGE_METHOD_NEGOCIATE:
+                            ResponseHandler rh =
+                                    createMessageHandler(dgramSocket, publicAddress, publicPort);
                             switch (message.getMessageClass()) {
                                 case MESSAGE_CLASS_INDICATION:
                                     agent.onMessage(msgBuffer, remoteAddress, rh);
@@ -277,15 +277,17 @@ public class UdpNegociator {
                             }
                             break;
                         case MESSAGE_METHOD_TRANSFER_FILE:
+                            ResponseHandler fth =
+                                createFileTransferHandler(dgramSocket, publicAddress, publicPort);
                             switch (message.getMessageClass()) {
                                 case MESSAGE_CLASS_REQUEST:
-                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    agent.onMessage(msgBuffer, remoteAddress, fth);
                                     break;
                                 case MESSAGE_CLASS_RESPONSE:
-                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    agent.onMessage(msgBuffer, remoteAddress, fth);
                                     break;
                                 case MESSAGE_CLASS_INDICATION:
-                                    agent.onMessage(msgBuffer, remoteAddress, rh);
+                                    agent.onMessage(msgBuffer, remoteAddress, fth);
                                     break;
                                 default:
                                     throw new AssertionError("Handling invalid message class, this should have been validated");
@@ -389,6 +391,7 @@ public class UdpNegociator {
                     Message request = Message.builder()
                             .setMessageClass(MESSAGE_CLASS_REQUEST)
                             .setMessageMethod(MESSAGE_METHOD_TRANSFER_FILE)
+                            .generateTransactionID()
                             .setAttributeBytes(attributeBytes)
                             .build();
                     byte[] requestBytes = request.getBytes();
@@ -409,6 +412,59 @@ public class UdpNegociator {
     }
 
     private ResponseHandler createMessageHandler(
+            final DatagramSocket dgramSocket, final String publicAddress, final int publicPort) {
+        return new ResponseHandler() {
+            @Override
+            public void onQuest(byte[] messageData, InetAddress destAddress, int destPort) {
+                System.out.println(String.format("Received request from %s %d", destAddress.getHostAddress(), destPort));
+
+                byte[] attributesBytes = makeMappedAttrbytes(publicAddress, publicPort);
+                Message request = Message.builder()
+                        .setMessageClass(MESSAGE_CLASS_RESPONSE)
+                        .setMessageMethod(MESSAGE_METHOD_NEGOCIATE)
+                        .generateTransactionID()
+                        .setAttributeBytes(attributesBytes)
+                        .build();
+
+                byte[] requestBytes = request.getBytes();
+                AppSingleton.getInstance().getSendService().sendMessage(requestBytes, destAddress.getHostAddress(), destPort);
+                AppSingleton.getInstance().getNodeCollection().getFirstPeer(destAddress, destPort).setRequestReceived();
+            }
+
+            @Override
+            public void onResponse(byte[] messageData, InetAddress destAddress, int destPort) {
+                System.out.println(String.format("Received response from %s %d", destAddress.getHostAddress(), destPort));
+
+                System.out.println(String.format("ResponseReceived %b", AppSingleton.getInstance().getNodeCollection().getFirstPeer(destAddress, destPort).getResponseReceived()));
+                AppSingleton.getInstance().getNodeCollection().getFirstPeer(destAddress, destPort).setResponseReceived();
+                System.out.println(String.format("ResponseReceived %b", AppSingleton.getInstance().getNodeCollection().getFirstPeer(destAddress, destPort).getResponseReceived()));
+            }
+
+            @Override
+            public void onIndication(byte[] messageData, InetAddress destAddress, int destPort) {
+
+                Message message = new Message(Preconditions.checkNotNull(messageData));
+                byte[] attributesBytes = makeMappedAttrbytes(publicAddress, publicPort);
+
+                Message request = Message.builder()
+                        .setMessageClass(MESSAGE_CLASS_REQUEST)
+                        .setMessageMethod(MESSAGE_METHOD_NEGOCIATE)
+                        .setTransactionId(message.getTransactionId())
+                        .setAttributeBytes(attributesBytes)
+                        .build();
+                byte[] requestBytes = request.getBytes();
+
+                AppSingleton.getInstance().getSendService().sendMessage(requestBytes, destAddress.getHostAddress(), destPort);
+
+                if (!AppSingleton.getInstance().getNodeCollection().hasPeer(destAddress, destPort)) {
+                    AppSingleton.getInstance().getNodeCollection().addPeer(destAddress.getHostAddress(), destPort);
+                }
+            }
+
+        };
+    }
+
+    private ResponseHandler createFileTransferHandler(
             final DatagramSocket dgramSocket, final String publicAddress, final int publicPort) {
         return new ResponseHandler() {
             @Override

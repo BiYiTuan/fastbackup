@@ -21,8 +21,8 @@ import java.util.concurrent.Executors;
 public class BasicServer {
 
   public static void main(String[] args) throws IOException {
-    MultiThreadedServer streamServer1 = new MultiThreadedServer(3478);
-    MultiThreadedServer streamServer2 = new MultiThreadedServer(3479);
+//    MultiThreadedServer streamServer1 = new MultiThreadedServer(3478);
+//    MultiThreadedServer streamServer2 = new MultiThreadedServer(3479);
     DatagramServer dgramServer1 = new DatagramServer(3478);
     DatagramServer dgramServer2 = new DatagramServer(3479);
 
@@ -31,9 +31,9 @@ public class BasicServer {
 //    new Thread(dgramServer1).start();
 //    new Thread(dgramServer2).start();
 
-    ExecutorService executor = Executors.newFixedThreadPool(4);
-    executor.submit(streamServer1);
-    executor.submit(streamServer2);
+    ExecutorService executor = Executors.newFixedThreadPool(2);
+//    executor.submit(streamServer1);
+//    executor.submit(streamServer2);
     executor.submit(dgramServer1);
     executor.submit(dgramServer2);
     executor.shutdown();
